@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class Player {
   // NAME
   String name;
@@ -26,10 +24,9 @@ class Player {
   num connsecutiveCannons = 0;
   num connsecutiveHazards = 0;
 
-
   Player(this.name, this.handicap) {
     this.score = 0;
-    this.framesWon = 0;
+    this.gamesWon = 0;
     score += handicap;
   }
 }

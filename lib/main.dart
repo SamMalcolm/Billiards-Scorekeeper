@@ -15,10 +15,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Snooker',
+      title: 'English Billiards',
       theme:
           ThemeData(primarySwatch: Colors.green, brightness: Brightness.light),
-      home: MyHomePage(title: 'Snooker Scoreboard'),
+      home: MyHomePage(title: 'Billiards Scoreboard'),
     );
   }
 }
@@ -46,20 +46,20 @@ class _MyHomePageState extends State<MyHomePage> {
       SizedBox(width: 10.00),
       bigButton(
           Text(
+            '+100',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          [const Color(0xffCCCACA), const Color(0xffA2A0A0)], () {
+        setval(100);
+      }),
+      SizedBox(width: 10.00),
+      bigButton(
+          Text(
             '+10',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
           [const Color(0xffCCCACA), const Color(0xffA2A0A0)], () {
         setval(10);
-      }),
-      SizedBox(width: 10.00),
-      bigButton(
-          Text(
-            '+1',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          [const Color(0xffCCCACA), const Color(0xffA2A0A0)], () {
-        setval(1);
       }),
       SizedBox(width: 10.00),
       Text(
@@ -72,20 +72,20 @@ class _MyHomePageState extends State<MyHomePage> {
       SizedBox(width: 10.00),
       bigButton(
           Text(
-            '-1',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          [const Color(0xffCCCACA), const Color(0xffA2A0A0)], () {
-        setval(-1);
-      }),
-      SizedBox(width: 10.00),
-      bigButton(
-          Text(
             '-10',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
           [const Color(0xffCCCACA), const Color(0xffA2A0A0)], () {
         setval(-10);
+      }),
+      SizedBox(width: 10.00),
+      bigButton(
+          Text(
+            '-100',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          [const Color(0xffCCCACA), const Color(0xffA2A0A0)], () {
+        setval(-100);
       }),
       SizedBox(width: 10.00),
     ];
@@ -136,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             bottom: 16.00,
                             top: 180.00),
                     child: Text(
-                      'Snooker Scoreboard',
+                      'English Billiards Scoreboard',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontFamily: 'Helvetica Neue',

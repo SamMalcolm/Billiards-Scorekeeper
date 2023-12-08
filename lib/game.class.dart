@@ -1,11 +1,6 @@
 import 'player.class.dart';
-import 'components.dart';
-
-
-
 
 class Game {
-
   List players = [];
   List games = [];
   List currGame = [];
@@ -13,10 +8,10 @@ class Game {
 
   String winCondition = 'score';
 
-  bool baulkLineCrossingRuleApplies
+  bool baulkLineCrossingRuleApplies = true;
 
   void foul(value) {
-    currFrame.add('F2');
+    currGame.add('F2');
 
     Player p = getInactivePlayer();
     p.score += 2;
@@ -27,10 +22,10 @@ class Game {
   }
 
   void miss() {
-    currFrame.add('M2');
+    currGame.add('M2');
 
     Player p = getInactivePlayer();
-    p.score += value;
+    p.score += 2;
     p.foulPointsRecieved += 2;
 
     Player a = getActivePlayer();
@@ -58,15 +53,14 @@ class Game {
         players[i].active = true;
       }
     }
-    currFrame.add('PT');
-    calculatePointsRemaining();
+    currGame.add('PT');
   }
 
   void endGame() {
-    framesPlayed++;
-    currFrame.add("END");
-    frames.add(currFrame);
-    currFrame = [];
+    gamesPlayed++;
+    currGame.add("END");
+    games.add(currGame);
+    currGame = [];
 
     if (players[0].score > players[1].score) {
       players[0].framesWon++;
@@ -87,12 +81,12 @@ class Game {
     Player ip = getInactivePlayer();
     Player ap = getActivePlayer();
 
-    if (currFrame.length > 0) {
-      String lastAction = currFrame.removeLast();
+    if (currGame.length > 0) {
+      String lastAction = currGame.removeLast();
       switch (lastAction) {
         case "PT":
           passTurn();
-          currFrame.removeLast();
+          currGame.removeLast();
           break;
         case "F4":
           ip.score -= 4;
@@ -115,7 +109,6 @@ class Game {
           ap.foulPointsGiven -= 7;
           break;
       }
-      calculatePointsRemaining();
     }
   }
 

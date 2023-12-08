@@ -58,7 +58,7 @@ class _GameView extends State<GameView> {
           child: Column(children: [
             Row(children: [
               bigButton(
-                  Text('+1  (${game.redsRemaining})',
+                  Text('+1',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontFamily: 'Helvetica Neue',
@@ -69,14 +69,7 @@ class _GameView extends State<GameView> {
                     const Color(0xffC72D2D),
                     const Color(0xff9D2C2C),
                   ],
-                  (game.redsRemaining > 0)
-                      ? () {
-                          setState(() {
-                            game.pot("R", fb);
-                            fb = false;
-                          });
-                        }
-                      : null),
+                  null),
               SizedBox(width: 10.00),
               Expanded(
                   child: Row(
@@ -92,11 +85,8 @@ class _GameView extends State<GameView> {
                       [
                         const Color(0xffC72D2D),
                         const Color(0xff9D2C2C),
-                      ], () {
-                    setState(() {
-                      game.incrementReds();
-                    });
-                  }),
+                      ],
+                      () {}),
                   SizedBox(width: 10.00),
                   bigButton(
                       Text('-',
@@ -110,9 +100,7 @@ class _GameView extends State<GameView> {
                         const Color(0xffC72D2D),
                         const Color(0xff9D2C2C),
                       ], () {
-                    setState(() {
-                      game.decrementReds();
-                    });
+                    setState(() {});
                   }),
                 ],
               ))
@@ -130,17 +118,7 @@ class _GameView extends State<GameView> {
                         const Color(0xffE0C534),
                         const Color(0xffCEB636),
                       ],
-                      (game.yellowsRemaining > 0 &&
-                              (game.lastActionRed() ||
-                                  game.redsRemaining == 0) &&
-                              game.validateFinalColours("Y"))
-                          ? () {
-                              setState(() {
-                                game.pot("Y", fb);
-                                fb = false;
-                              });
-                            }
-                          : null),
+                      null),
                   SizedBox(width: 10.00),
                   ballButton(
                       '+3',
@@ -148,35 +126,16 @@ class _GameView extends State<GameView> {
                         const Color(0xff4CA256),
                         const Color(0xff397140),
                       ],
-                      (game.greensRemaining > 0 &&
-                              (game.lastActionRed() ||
-                                  game.redsRemaining == 0) &&
-                              game.validateFinalColours("G"))
-                          ? () {
-                              setState(() {
-                                game.pot("G", fb);
-                                fb = false;
-                              });
-                            }
-                          : null),
+                      null),
                   SizedBox(width: 10.00),
                   ballButton(
-                      '+4',
-                      [
-                        const Color(0xffB48247),
-                        const Color(0xff694A20),
-                      ],
-                      (game.brownsRemaining > 0 &&
-                              (game.lastActionRed() ||
-                                  game.redsRemaining == 0) &&
-                              game.validateFinalColours("br"))
-                          ? () {
-                              setState(() {
-                                game.pot("br", fb);
-                                fb = false;
-                              });
-                            }
-                          : null),
+                    '+4',
+                    [
+                      const Color(0xffB48247),
+                      const Color(0xff694A20),
+                    ],
+                    null,
+                  )
                 ],
               ),
             ),
@@ -190,17 +149,7 @@ class _GameView extends State<GameView> {
                         const Color(0xff5271D6),
                         const Color(0xff2F4EB4),
                       ],
-                      (game.bluesRemaining > 0 &&
-                              (game.lastActionRed() ||
-                                  game.redsRemaining == 0) &&
-                              game.validateFinalColours("bl"))
-                          ? () {
-                              setState(() {
-                                game.pot("bl", fb);
-                                fb = false;
-                              });
-                            }
-                          : null),
+                      null),
                   SizedBox(width: 10.00),
                   ballButton(
                       '+6',
@@ -208,17 +157,7 @@ class _GameView extends State<GameView> {
                         const Color(0xffE066BA),
                         const Color(0xff9B3D9B),
                       ],
-                      (game.pinksRemaining > 0 &&
-                              (game.lastActionRed() ||
-                                  game.redsRemaining == 0) &&
-                              game.validateFinalColours("P"))
-                          ? () {
-                              setState(() {
-                                game.pot("P", fb);
-                                fb = false;
-                              });
-                            }
-                          : null),
+                      null),
                   SizedBox(width: 10.00),
                   ballButton(
                       '+7',
@@ -226,17 +165,7 @@ class _GameView extends State<GameView> {
                         const Color(0xff393939),
                         const Color(0xff0B0B0B),
                       ],
-                      (game.blacksRemaining > 0 &&
-                              (game.lastActionRed() ||
-                                  game.redsRemaining == 0) &&
-                              game.validateFinalColours("B"))
-                          ? () {
-                              setState(() {
-                                game.pot("B", fb);
-                                fb = false;
-                              });
-                            }
-                          : null),
+                      null),
                 ],
               ),
             ),
@@ -441,7 +370,7 @@ class _GameView extends State<GameView> {
         Expanded(
           child: Column(children: [
             Text(
-              '(${game.framesPlayed})',
+              '()',
               style: TextStyle(
                 fontFamily: 'Helvetica Neue',
                 fontSize: 22,
