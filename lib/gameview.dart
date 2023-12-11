@@ -7,11 +7,20 @@ import 'blurryDialog.dart';
 import 'main.dart';
 
 class GameView extends StatefulWidget {
-  GameView({Key? key, required this.playerNames, required this.playerHandicaps})
+  GameView(
+      {Key? key,
+      required this.playerNames,
+      required this.playerHandicaps,
+      required this.playerTiers,
+      required this.handicap,
+      required this.handicappedpWithTiers})
       : super(key: key);
 
   final List playerNames;
   final List playerHandicaps;
+  final List playerTiers;
+  final bool handicap;
+  final bool handicappedpWithTiers;
 
   @override
   _GameView createState() => _GameView();
@@ -305,7 +314,7 @@ class _GameView extends State<GameView> {
         Expanded(
           child: Column(children: [
             Text(
-              '${game.players[0].framesWon}',
+              '${game.players[0].gamesWon}',
               style: TextStyle(
                   fontFamily: 'Helvetica Neue',
                   fontSize: 22,
@@ -354,17 +363,6 @@ class _GameView extends State<GameView> {
                       : FontWeight.normal),
               textAlign: TextAlign.center,
             ),
-            if (game.players[0].snookersRequired > 0)
-              Text(
-                'Snookers: ${game.players[0].snookersRequired}',
-                style: TextStyle(
-                    fontFamily: 'Helvetica Neue',
-                    fontSize: 12,
-                    fontWeight: (game.players[0].active)
-                        ? FontWeight.bold
-                        : FontWeight.normal),
-                textAlign: TextAlign.center,
-              ),
           ]),
         ),
         Expanded(
@@ -382,7 +380,7 @@ class _GameView extends State<GameView> {
         Expanded(
           child: Column(children: [
             Text(
-              '${game.players[1].framesWon}',
+              '${game.players[1].gamesWon}',
               style: TextStyle(
                   fontFamily: 'Helvetica Neue',
                   fontSize: 22,
@@ -431,17 +429,6 @@ class _GameView extends State<GameView> {
                       : FontWeight.normal),
               textAlign: TextAlign.center,
             ),
-            if (game.players[1].snookersRequired > 0)
-              Text(
-                'Snookers: ${game.players[1].snookersRequired}',
-                style: TextStyle(
-                    fontFamily: 'Helvetica Neue',
-                    fontSize: 12,
-                    fontWeight: (game.players[1].active)
-                        ? FontWeight.bold
-                        : FontWeight.normal),
-                textAlign: TextAlign.center,
-              ),
           ]),
         ),
       ]),
@@ -464,8 +451,6 @@ class _GameView extends State<GameView> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            returnScoreLine(game.players[0],
-                (orientation == Orientation.landscape) ? 100.00 : 35.00),
             Expanded(
               child: SafeArea(
                 child: Container(
@@ -482,9 +467,7 @@ class _GameView extends State<GameView> {
                   ),
                 ),
               ),
-            ),
-            returnScoreLine(game.players[1],
-                (orientation == Orientation.landscape) ? 100.00 : 35.00)
+            )
           ],
         );
       }),

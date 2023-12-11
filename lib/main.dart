@@ -39,7 +39,14 @@ class _MyHomePageState extends State<MyHomePage> {
   num player1Handicap = 0;
   num player2Handicap = 0;
 
+  num player1Tier = 0;
+  num player2Tier = 0;
+
+  bool handicappedWithTiers = false;
+
   bool handicap = false;
+
+  bool baulkLineCrossingRule = false;
 
   List<Widget> handicapInput(phc, setval) {
     return [
@@ -91,6 +98,38 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
   }
 
+  List<Widget> tierInput(playerTier, setval) {
+    return [
+      SizedBox(width: 10.00),
+      bigButton(
+          Text(
+            '+1',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          [const Color(0xffCCCACA), const Color(0xffA2A0A0)], () {
+        setval(1);
+      }),
+      SizedBox(width: 10.00),
+      Text(
+        '$playerTier',
+        style: TextStyle(
+          fontFamily: 'Helvetica Neue',
+          fontSize: 22,
+        ),
+      ),
+      SizedBox(width: 10.00),
+      bigButton(
+          Text(
+            '-1',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          [const Color(0xffCCCACA), const Color(0xffA2A0A0)], () {
+        setval(-1);
+      }),
+      SizedBox(width: 10.00),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,7 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: [
                   Positioned.fill(
                     child: FittedBox(
-                      child: Image.asset('images/table.jpg'),
+                      child: Image.asset('images/billiards.jpg'),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -165,11 +204,17 @@ class _MyHomePageState extends State<MyHomePage> {
                   SizedBox(height: 15.00),
                   if (handicap)
                     Row(children: [
-                      ...handicapInput(player1Handicap, (val) {
-                        setState(() {
-                          player1Handicap += val;
-                        });
-                      }),
+                      ...(handicappedWithTiers)
+                          ? tierInput(player1Tier, (val) {
+                              setState(() {
+                                player1Tier += val;
+                              });
+                            })
+                          : handicapInput(player1Handicap, (val) {
+                              setState(() {
+                                player1Handicap += val;
+                              });
+                            }),
                       SizedBox(height: 15.00),
                     ]),
                   TextField(
@@ -184,17 +229,23 @@ class _MyHomePageState extends State<MyHomePage> {
                   SizedBox(height: 15.00),
                   if (handicap)
                     Row(children: [
-                      ...handicapInput(player2Handicap, (value) {
-                        setState(() {
-                          player2Handicap += value;
-                        });
-                      }),
+                      ...(handicappedWithTiers)
+                          ? tierInput(player2Tier, (val) {
+                              setState(() {
+                                player2Tier += val;
+                              });
+                            })
+                          : handicapInput(player2Handicap, (val) {
+                              setState(() {
+                                player2Handicap += val;
+                              });
+                            }),
                       SizedBox(height: 15.00),
                     ]),
                   SizedBox(height: 15.00),
                   Row(children: [
                     bigButton(
-                        Text('Handicap',
+                        Text((handicap) ? 'Handicapped' : 'Scratch',
                             textAlign: TextAlign.left,
                             style: TextStyle(
                               fontFamily: 'Helvetica Neue',
@@ -206,6 +257,62 @@ class _MyHomePageState extends State<MyHomePage> {
                         handicap = !handicap;
                       });
                     }),
+                  ]),
+                  SizedBox(height: 15.00),
+                  Row(children: [
+                    (handicap)
+                        ? bigButton(
+                            Text(
+                                (handicappedWithTiers)
+                                    ? 'Victorian Billiards Tiers'
+                                    : 'Points',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  fontFamily: 'Helvetica Neue',
+                                  fontSize: 22,
+                                  color: Colors.white,
+                                )),
+                            freeBallInputColour(handicap), () {
+                            setState(() {
+                              handicappedWithTiers = !handicappedWithTiers;
+                            });
+                          })
+                        : SizedBox.shrink(),
+                  ]),
+                  SizedBox(height: 15.00),
+                  Row(children: [
+                    bigButton(
+                        Text(
+                            (baulkLineCrossingRule)
+                                ? 'Baulk Line Crossing Rule Applies'
+                                : 'Baulk Line Crossing Rule Does Not Apply',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontFamily: 'Helvetica Neue',
+                              fontSize: 18,
+                              color: Colors.white,
+                            )),
+                        freeBallInputColour(baulkLineCrossingRule), () {
+                      setState(() {
+                        baulkLineCrossingRule = !baulkLineCrossingRule;
+                      });
+                    })
+                  ]),
+                  SizedBox(height: 15.00),
+                  Row(children: [
+                    bigButton(
+                        Text((baulkLineCrossingRule) ? 'Timed' : 'Target Score',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontFamily: 'Helvetica Neue',
+                              fontSize: 18,
+                              color: Colors.white,
+                            )),
+                        freeBallInputColour(baulkLineCrossingRule), () {
+                      setState(() {
+                        baulkLineCrossingRule = !baulkLineCrossingRule;
+                      });
+                    })
                   ]),
                   SizedBox(height: 15.00),
                   Row(children: [
@@ -224,13 +331,21 @@ class _MyHomePageState extends State<MyHomePage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => GameView(playerNames: [
-                              player1name,
-                              player2name
-                            ], playerHandicaps: [
-                              player1Handicap,
-                              player2Handicap
-                            ]),
+                            builder: (context) => GameView(
+                                playerNames: [
+                                  player1name,
+                                  player2name
+                                ],
+                                playerHandicaps: [
+                                  player1Handicap,
+                                  player2Handicap
+                                ],
+                                playerTiers: [
+                                  player1Tier,
+                                  player2Tier
+                                ],
+                                handicap: handicap,
+                                handicappedpWithTiers: handicappedWithTiers),
                           ));
                     }),
                   ]),
