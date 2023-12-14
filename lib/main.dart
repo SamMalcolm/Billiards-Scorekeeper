@@ -47,6 +47,9 @@ class _MyHomePageState extends State<MyHomePage> {
   bool handicap = false;
 
   bool baulkLineCrossingRule = false;
+  bool timed = false;
+  int minutes = 0;
+  num targetScore = 0;
 
   List<Widget> handicapInput(phc, setval) {
     return [
@@ -193,7 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Column(children: [
                   SizedBox(height: 15.00),
                   TextField(
-                    decoration: InputDecoration(hintText: 'Player 1 Name'),
+                    decoration: InputDecoration(hintText: 'Yellow Ball Player'),
                     onChanged: (String value) {
                       setState(() {
                         value = (value != "") ? value : "Player 1";
@@ -218,7 +221,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       SizedBox(height: 15.00),
                     ]),
                   TextField(
-                    decoration: InputDecoration(hintText: 'Player 2 Name'),
+                    decoration: InputDecoration(hintText: 'White Ball Player'),
                     onChanged: (String value) {
                       setState(() {
                         value = (value != "") ? value : "Player 2";
@@ -301,19 +304,39 @@ class _MyHomePageState extends State<MyHomePage> {
                   SizedBox(height: 15.00),
                   Row(children: [
                     bigButton(
-                        Text((baulkLineCrossingRule) ? 'Timed' : 'Target Score',
+                        Text((timed) ? 'Timed' : 'Target Score',
                             textAlign: TextAlign.left,
                             style: TextStyle(
                               fontFamily: 'Helvetica Neue',
                               fontSize: 18,
                               color: Colors.white,
                             )),
-                        freeBallInputColour(baulkLineCrossingRule), () {
+                        freeBallInputColour(timed), () {
                       setState(() {
-                        baulkLineCrossingRule = !baulkLineCrossingRule;
+                        timed = !timed;
                       });
                     })
                   ]),
+                  if (timed)
+                    TextField(
+                      decoration: InputDecoration(hintText: 'Minutes'),
+                      keyboardType: TextInputType.number,
+                      onChanged: (String value) {
+                        setState(() {
+                          minutes = int.parse(value);
+                        });
+                      },
+                    ),
+                  if (!timed)
+                    TextField(
+                      decoration: InputDecoration(hintText: 'Score'),
+                      keyboardType: TextInputType.number,
+                      onChanged: (String value) {
+                        setState(() {
+                          targetScore = num.parse(value);
+                        });
+                      },
+                    ),
                   SizedBox(height: 15.00),
                   Row(children: [
                     bigButton(
@@ -345,7 +368,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                   player2Tier
                                 ],
                                 handicap: handicap,
-                                handicappedpWithTiers: handicappedWithTiers),
+                                handicappedpWithTiers: handicappedWithTiers,
+                                timed: timed,
+                                targetScore: targetScore,
+                                minutes: minutes),
                           ));
                     }),
                   ]),

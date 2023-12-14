@@ -6,7 +6,7 @@ class Player {
   num handicap = 0;
   num score = 0;
   num gamesWon = 0;
-  num vbsaTier = 0;
+  num tier = 0;
 
   // FOUL
   num foulPointsGiven = 0;
@@ -24,9 +24,13 @@ class Player {
   num connsecutiveCannons = 0;
   num connsecutiveHazards = 0;
 
-  Player(this.name, this.handicap) {
+  num rawScore = 0;
+  num multiplier = 1;
+
+  Player(this.name, this.handicap, this.tier) {
     this.score = 0;
     this.gamesWon = 0;
+
     score += handicap;
   }
 }

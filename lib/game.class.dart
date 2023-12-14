@@ -5,6 +5,9 @@ class Game {
   List games = [];
   List currGame = [];
   num gamesPlayed = 0;
+  bool timed = false;
+  num minutes = 0;
+  num targetScore = 0;
 
   String winCondition = 'score';
 
@@ -63,17 +66,14 @@ class Game {
     currGame = [];
 
     if (players[0].score > players[1].score) {
-      players[0].framesWon++;
+      players[0].gamesWon++;
     } else {
-      players[1].framesWon++;
+      players[1].gamesWon++;
     }
 
     for (int i = 0; i < players.length; i++) {
       players[i].score = players[i].handicap;
       players[i].currBreak = 0;
-      players[i].snookersRequired = 0;
-      players[i].maxScore = 147;
-      players[i].snookersReqdScoreline = 74;
     }
   }
 
@@ -112,9 +112,13 @@ class Game {
     }
   }
 
-  Game(playerNames, handicaps) {
-    this.players.add(new Player(playerNames[0], handicaps[0]));
-    this.players.add(new Player(playerNames[1], handicaps[1]));
+  Game(playerNames, handicaps, tiers, handicappedByTiers, timed, minutes,
+      targetScore) {
+    this.players.add(new Player(playerNames[0], handicaps[0], tiers[0]));
+    this.players.add(new Player(playerNames[1], handicaps[1], tiers[1]));
+    this.timed = timed;
+    this.targetScore = targetScore;
+    this.minutes = minutes;
     players[0].active = true;
   }
 }

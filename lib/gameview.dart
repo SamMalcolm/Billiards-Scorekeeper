@@ -5,6 +5,7 @@ import 'game.class.dart';
 import 'components.dart';
 import 'blurryDialog.dart';
 import 'main.dart';
+import 'timer.class.dart';
 
 class GameView extends StatefulWidget {
   GameView(
@@ -13,7 +14,10 @@ class GameView extends StatefulWidget {
       required this.playerHandicaps,
       required this.playerTiers,
       required this.handicap,
-      required this.handicappedpWithTiers})
+      required this.handicappedpWithTiers,
+      required this.timed,
+      required this.targetScore,
+      required this.minutes})
       : super(key: key);
 
   final List playerNames;
@@ -21,6 +25,9 @@ class GameView extends StatefulWidget {
   final List playerTiers;
   final bool handicap;
   final bool handicappedpWithTiers;
+  final num targetScore;
+  final bool timed;
+  final int minutes;
 
   @override
   _GameView createState() => _GameView();
@@ -28,7 +35,8 @@ class GameView extends StatefulWidget {
 
 class _GameView extends State<GameView> {
   num? redsRemaining = 15;
-  Game game = new Game(["default", "default2"], [0, 0]);
+  Game game =
+      new Game(["default", "default2"], [0, 0], [0, 0], false, false, 0, 0);
   bool foulInput = false;
   bool fb = false;
   bool init = false;
@@ -65,9 +73,62 @@ class _GameView extends State<GameView> {
       Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(children: [
+            Divider(),
+            Text("Two Point Scores"),
+            SizedBox(height: 10.00),
             Row(children: [
               bigButton(
-                  Text('+1',
+                  Text('Winning Hazard (Potting Opponent)',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontFamily: 'Helvetica Neue',
+                        fontSize: 22,
+                        color: Colors.white,
+                      )),
+                  [
+                    Color.fromARGB(255, 225, 183, 14),
+                    Color.fromARGB(255, 197, 156, 11),
+                  ],
+                  null),
+            ]),
+            SizedBox(height: 10.00),
+            Row(children: [
+              bigButton(
+                  Text('Losing Hazard (In-Off Opponent)',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontFamily: 'Helvetica Neue',
+                        fontSize: 22,
+                        color: Colors.white,
+                      )),
+                  [
+                    Color.fromARGB(255, 225, 183, 14),
+                    Color.fromARGB(255, 197, 156, 11),
+                  ],
+                  null),
+            ]),
+            SizedBox(height: 10.00),
+            Row(children: [
+              bigButton(
+                  Text('Cannon',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontFamily: 'Helvetica Neue',
+                        fontSize: 22,
+                        color: Colors.white,
+                      )),
+                  [
+                    Color.fromARGB(255, 225, 183, 14),
+                    const Color(0xff9D2C2C),
+                  ],
+                  null),
+            ]),
+            Divider(),
+            Text("Three Point Scores"),
+            SizedBox(height: 10.00),
+            Row(children: [
+              bigButton(
+                  Text('Winning Hazard (Potting Red)',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontFamily: 'Helvetica Neue',
@@ -79,131 +140,61 @@ class _GameView extends State<GameView> {
                     const Color(0xff9D2C2C),
                   ],
                   null),
-              SizedBox(width: 10.00),
-              Expanded(
-                  child: Row(
-                children: [
-                  bigButton(
-                      Text('+',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontFamily: 'Helvetica Neue',
-                            fontSize: 22,
-                            color: Colors.white,
-                          )),
-                      [
-                        const Color(0xffC72D2D),
-                        const Color(0xff9D2C2C),
-                      ],
-                      () {}),
-                  SizedBox(width: 10.00),
-                  bigButton(
-                      Text('-',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontFamily: 'Helvetica Neue',
-                            fontSize: 22,
-                            color: Colors.white,
-                          )),
-                      [
-                        const Color(0xffC72D2D),
-                        const Color(0xff9D2C2C),
-                      ], () {
-                    setState(() {});
-                  }),
-                ],
-              ))
             ]),
-
-            //
-
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Row(
-                children: [
-                  ballButton(
-                      '+2',
-                      [
-                        const Color(0xffE0C534),
-                        const Color(0xffCEB636),
-                      ],
-                      null),
-                  SizedBox(width: 10.00),
-                  ballButton(
-                      '+3',
-                      [
-                        const Color(0xff4CA256),
-                        const Color(0xff397140),
-                      ],
-                      null),
-                  SizedBox(width: 10.00),
-                  ballButton(
-                    '+4',
-                    [
-                      const Color(0xffB48247),
-                      const Color(0xff694A20),
-                    ],
-                    null,
-                  )
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Row(
-                children: [
-                  ballButton(
-                      '+5',
-                      [
-                        const Color(0xff5271D6),
-                        const Color(0xff2F4EB4),
-                      ],
-                      null),
-                  SizedBox(width: 10.00),
-                  ballButton(
-                      '+6',
-                      [
-                        const Color(0xffE066BA),
-                        const Color(0xff9B3D9B),
-                      ],
-                      null),
-                  SizedBox(width: 10.00),
-                  ballButton(
-                      '+7',
-                      [
-                        const Color(0xff393939),
-                        const Color(0xff0B0B0B),
-                      ],
-                      null),
-                ],
-              ),
-            ),
             SizedBox(height: 10.00),
-            if (!foulInput)
-              Row(
-                children: [
-                  bigButton(
-                      Text('Foul',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontFamily: 'Helvetica Neue',
-                            fontSize: 18,
-                            color: Colors.white,
-                          )),
-                      [
-                        const Color(0xffCCCACA),
-                        const Color(0xffA2A0A0),
-                      ], () {
-                    setState(() {
-                      foulInput = true;
-                    });
-                  })
-                ],
-              ),
-            if (foulInput)
-              Row(
-                children: [...foulButtons()],
-              ),
+            Row(
+              children: [
+                bigButton(
+                    Text('Losing Hazard (In-Off Red)',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontFamily: 'Helvetica Neue',
+                          fontSize: 22,
+                          color: Colors.white,
+                        )),
+                    [
+                      const Color(0xffC72D2D),
+                      const Color(0xff9D2C2C),
+                    ],
+                    null),
+              ],
+            ),
+            Divider(),
+            Row(children: [
+              bigButton(
+                  Text('Submit Stroke',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontFamily: 'Helvetica Neue',
+                        fontSize: 22,
+                        color: Colors.white,
+                      )),
+                  [
+                    const Color(0xff4CA256),
+                    const Color(0xff397140),
+                  ],
+                  () {}),
+            ]),
+            Divider(),
+            SizedBox(height: 10.00),
+            Row(
+              children: [
+                bigButton(
+                    Text('Foul',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontFamily: 'Helvetica Neue',
+                          fontSize: 18,
+                          color: Colors.white,
+                        )),
+                    [
+                      const Color(0xffCCCACA),
+                      const Color(0xffA2A0A0),
+                    ], () {
+                  setState(() {});
+                })
+              ],
+            ),
             SizedBox(height: 10.00),
             Row(
               children: [
@@ -240,7 +231,7 @@ class _GameView extends State<GameView> {
                     setState(() {
                       game.endGame();
                     });
-                  }, "Concede Frame?", "Are you sure you to end this frame?");
+                  }, "Concede Game?", "Are you sure you to end this game?");
                 }),
               ],
             ),
@@ -263,20 +254,6 @@ class _GameView extends State<GameView> {
                     game.passTurn();
                   });
                 }),
-                SizedBox(width: 10.00),
-                bigButton(
-                    Text('Free Ball',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontFamily: 'Helvetica Neue',
-                          fontSize: 18,
-                          color: Colors.white,
-                        )),
-                    freeBallInputColour(fb), () {
-                  setState(() {
-                    fb = !fb;
-                  });
-                })
               ],
             ),
             SizedBox(height: 10.00),
@@ -363,12 +340,32 @@ class _GameView extends State<GameView> {
                       : FontWeight.normal),
               textAlign: TextAlign.center,
             ),
+            Text(
+              'Raw Score: ${game.players[0].rawScore}',
+              style: TextStyle(
+                  fontFamily: 'Helvetica Neue',
+                  fontSize: 12,
+                  fontWeight: (game.players[0].active)
+                      ? FontWeight.bold
+                      : FontWeight.normal),
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              'Score Multiplier: ${game.players[0].multiplier}',
+              style: TextStyle(
+                  fontFamily: 'Helvetica Neue',
+                  fontSize: 12,
+                  fontWeight: (game.players[0].active)
+                      ? FontWeight.bold
+                      : FontWeight.normal),
+              textAlign: TextAlign.center,
+            ),
           ]),
         ),
         Expanded(
           child: Column(children: [
             Text(
-              '()',
+              '(${game.gamesPlayed})',
               style: TextStyle(
                 fontFamily: 'Helvetica Neue',
                 fontSize: 22,
@@ -429,6 +426,26 @@ class _GameView extends State<GameView> {
                       : FontWeight.normal),
               textAlign: TextAlign.center,
             ),
+            Text(
+              'Raw Score: ${game.players[1].rawScore}',
+              style: TextStyle(
+                  fontFamily: 'Helvetica Neue',
+                  fontSize: 12,
+                  fontWeight: (game.players[0].active)
+                      ? FontWeight.bold
+                      : FontWeight.normal),
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              'Score Multiplier: ${game.players[1].multiplier}',
+              style: TextStyle(
+                  fontFamily: 'Helvetica Neue',
+                  fontSize: 12,
+                  fontWeight: (game.players[0].active)
+                      ? FontWeight.bold
+                      : FontWeight.normal),
+              textAlign: TextAlign.center,
+            ),
           ]),
         ),
       ]),
@@ -439,7 +456,14 @@ class _GameView extends State<GameView> {
   Widget build(BuildContext context) {
     setState(() {
       if (!init) {
-        game = new Game(widget.playerNames, widget.playerHandicaps);
+        game = new Game(
+            widget.playerNames,
+            widget.playerHandicaps,
+            widget.playerTiers,
+            widget.handicappedpWithTiers,
+            widget.timed,
+            widget.minutes,
+            widget.targetScore);
         init = true;
       }
     });
@@ -460,6 +484,7 @@ class _GameView extends State<GameView> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SizedBox(height: 15.00),
+                        if (widget.timed) new Timer(widget.minutes).component,
                         ...scoreBoard(),
                         ...scoringInput(context),
                       ],
