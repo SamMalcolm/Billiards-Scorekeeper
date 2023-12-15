@@ -1,73 +1,120 @@
-import 'package:timer_count_down/timer_controller.dart';
-import 'package:timer_count_down/timer_count_down.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'gameview.dart';
 import 'components.dart';
+import 'dart:async';
 
-class Timer {
-  // NAME
-  int secondsRemaining = 0;
-  int minutes = 0;
-  Widget component = Text('Loading');
-  CountdownController _controller = new CountdownController(autoStart: true);
+class CountdownTimer extends StatefulWidget {
+  final int minutes;
 
-  Timer(this.minutes) {
-    secondsRemaining = this.minutes * 60;
+  const CountdownTimer({Key? key, required this.minutes}) : super(key: key);
 
-    this.component = Column(children: [
-      Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
+  @override
+  _CountdownTimerState createState() => _CountdownTimerState();
+}
+
+class _CountdownTimerState extends State<CountdownTimer> {
+  late int _remainingTimeInSeconds;
+  late Timer _timer;
+  bool _isPaused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _remainingTimeInSeconds = widget.minutes * 60;
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (!_isPaused) {
+        setState(() {
+          if (_remainingTimeInSeconds > 0) {
+            _remainingTimeInSeconds--;
+          } else {
+            _timer.cancel();
+          }
+        });
+      }
+    });
+  }
+
+  String _formatTime(int timeInSeconds) {
+    int hours = timeInSeconds ~/ 3600;
+    int minutes = (timeInSeconds ~/ 60) % 60;
+    int seconds = timeInSeconds % 60;
+
+    String hoursStr =
+        (hours > 0) ? '${hours.toString().padLeft(2, '0')}: ' : '';
+    String minutesStr = '${minutes.toString().padLeft(2, '0')}:';
+    String secondsStr = '${seconds.toString().padLeft(2, '0')}';
+
+    return '$hoursStr$minutesStr$secondsStr';
+  }
+
+  void _restartTimer() {
+    setState(() {
+      _remainingTimeInSeconds = widget.minutes * 60;
+      _isPaused = false;
+    });
+    _startTimer();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          'Time Remaining:',
+          style: TextStyle(fontSize: 20),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        SizedBox(height: 10),
+        Text(
+          _formatTime(_remainingTimeInSeconds),
+          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // Start
-            ElevatedButton(
-              child: Text('Start'),
+            IconButton(
+              icon: Icon(_isPaused ? Icons.play_arrow : Icons.pause),
               onPressed: () {
-                _controller.start();
+                setState(() {
+                  _isPaused = !_isPaused;
+                });
               },
             ),
-            // Pause
-            ElevatedButton(
-              child: Text('Pause'),
+            IconButton(
+              icon: Icon(Icons.refresh),
               onPressed: () {
-                _controller.pause();
-              },
-            ),
-            // Resume
-            ElevatedButton(
-              child: Text('Resume'),
-              onPressed: () {
-                _controller.resume();
-              },
-            ),
-            // Stop
-            ElevatedButton(
-              child: Text('Restart'),
-              onPressed: () {
-                _controller.restart();
+                _restartTimer();
               },
             ),
           ],
         ),
-      ),
-      Countdown(
-          controller: _controller,
-          seconds: this.secondsRemaining,
-          build: (_, double time) => Text(
-                time.toString(),
-                style: TextStyle(
-                  fontSize: 100,
-                ),
-              ),
-          interval: Duration(milliseconds: 100),
-          onFinished: () {
-            return Text('Timer is done!');
-          })
-    ]);
-    ;
+      ],
+    );
+  }
+}
+
+class TimerC {
+  // NAME
+  int secondsRemaining = 0;
+  int minutes = 0;
+  Widget component = Text('Loading');
+
+  TimerC(this.minutes) {
+    secondsRemaining = this.minutes * 60;
+
+    this.component = CountdownTimer(minutes: this.minutes);
   }
 }

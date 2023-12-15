@@ -484,7 +484,7 @@ class _GameView extends State<GameView> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SizedBox(height: 15.00),
-                        if (widget.timed) new Timer(widget.minutes).component,
+                        if (widget.timed) new TimerC(widget.minutes).component,
                         ...scoreBoard(),
                         ...scoringInput(context),
                       ],
