@@ -68,11 +68,12 @@ List<Map> balls = [
   },
 ];
 
-Widget bigButton(child, gradientValues, pressed) {
+Widget bigButton(child, gradientValues, pressed, {border = false}) {
   return Expanded(
       child: Container(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(18.0),
+      border: (border) ? Border.all(width: 3.0, color: Colors.black) : null,
       gradient: LinearGradient(
         begin: Alignment(1.0, -1.92),
         end: Alignment(-0.94, 1.75),

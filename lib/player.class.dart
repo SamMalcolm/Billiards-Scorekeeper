@@ -27,9 +27,10 @@ class Player {
   num rawScore = 0;
   num multiplier = 1;
 
-  Player(this.name, this.handicap, this.tier) {
+  Player(this.name, this.handicap, this.tier, this.multiplier) {
     this.score = 0;
     this.gamesWon = 0;
+    this.multiplier = multiplier;
 
     score += handicap;
   }

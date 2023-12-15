@@ -41,32 +41,11 @@ class _GameView extends State<GameView> {
   bool fb = false;
   bool init = false;
 
-  List<Widget> foulButtons() {
-    List<Widget> result = [];
-    for (int i = 4; i < 8; i++) {
-      result.add(bigButton(
-          Text('$i',
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                fontFamily: 'Helvetica Neue',
-                fontSize: 22,
-                color: Colors.white,
-              )),
-          [
-            const Color(0xffCCCACA),
-            const Color(0xffA2A0A0),
-          ], () {
-        setState(() {
-          foulInput = false;
-          game.foul(i);
-        });
-      }));
-      if (i != 7) {
-        result.add(SizedBox(width: 10.00));
-      }
-    }
-    return result;
-  }
+  bool lh2 = false;
+  bool wh2 = false;
+  bool wh3 = false;
+  bool c = false;
+  bool lh3 = false;
 
   List scoringInput(context) {
     return [
@@ -83,13 +62,21 @@ class _GameView extends State<GameView> {
                       style: TextStyle(
                         fontFamily: 'Helvetica Neue',
                         fontSize: 22,
-                        color: Colors.white,
+                        color: ((game.players[1].active))
+                            ? Colors.white
+                            : const Color(0xff9D2C2C),
                       )),
-                  [
-                    Color.fromARGB(255, 225, 183, 14),
-                    Color.fromARGB(255, 197, 156, 11),
-                  ],
-                  null),
+                  (game.players[1].active)
+                      ? [
+                          Color.fromARGB(255, 225, 183, 14),
+                          Color.fromARGB(255, 197, 156, 11),
+                        ]
+                      : [
+                          Color.fromARGB(255, 250, 247, 222),
+                          Color.fromARGB(255, 216, 214, 192),
+                        ], () {
+                setState(() => wh2 = !wh2);
+              }, border: wh2),
             ]),
             SizedBox(height: 10.00),
             Row(children: [
@@ -99,13 +86,21 @@ class _GameView extends State<GameView> {
                       style: TextStyle(
                         fontFamily: 'Helvetica Neue',
                         fontSize: 22,
-                        color: Colors.white,
+                        color: ((game.players[1].active))
+                            ? Colors.white
+                            : const Color(0xff9D2C2C),
                       )),
-                  [
-                    Color.fromARGB(255, 225, 183, 14),
-                    Color.fromARGB(255, 197, 156, 11),
-                  ],
-                  null),
+                  (game.players[1].active)
+                      ? [
+                          Color.fromARGB(255, 225, 183, 14),
+                          Color.fromARGB(255, 197, 156, 11),
+                        ]
+                      : [
+                          Color.fromARGB(255, 250, 247, 222),
+                          Color.fromARGB(255, 216, 214, 192),
+                        ], () {
+                setState(() => lh2 = !lh2);
+              }, border: lh2),
             ]),
             SizedBox(height: 10.00),
             Row(children: [
@@ -118,10 +113,13 @@ class _GameView extends State<GameView> {
                         color: Colors.white,
                       )),
                   [
-                    Color.fromARGB(255, 225, 183, 14),
+                    (game.players[0].active)
+                        ? Color.fromARGB(255, 216, 214, 192)
+                        : Color.fromARGB(255, 225, 183, 14),
                     const Color(0xff9D2C2C),
-                  ],
-                  null),
+                  ], () {
+                setState(() => c = !c);
+              }, border: c),
             ]),
             Divider(),
             Text("Three Point Scores"),
@@ -138,8 +136,9 @@ class _GameView extends State<GameView> {
                   [
                     const Color(0xffC72D2D),
                     const Color(0xff9D2C2C),
-                  ],
-                  null),
+                  ], () {
+                setState(() => wh3 = !wh3);
+              }, border: wh3),
             ]),
             SizedBox(height: 10.00),
             Row(
@@ -155,8 +154,9 @@ class _GameView extends State<GameView> {
                     [
                       const Color(0xffC72D2D),
                       const Color(0xff9D2C2C),
-                    ],
-                    null),
+                    ], () {
+                  setState(() => lh3 = !lh3);
+                }, border: lh3),
               ],
             ),
             Divider(),
@@ -172,8 +172,16 @@ class _GameView extends State<GameView> {
                   [
                     const Color(0xff4CA256),
                     const Color(0xff397140),
-                  ],
-                  () {}),
+                  ], () {
+                setState(() {
+                  game.stroke(lh2, wh2, c, lh3, wh3);
+                  lh2 = false;
+                  wh2 = false;
+                  c = false;
+                  lh3 = false;
+                  wh3 = false;
+                });
+              }),
             ]),
             Divider(),
             SizedBox(height: 10.00),
@@ -360,6 +368,16 @@ class _GameView extends State<GameView> {
                       : FontWeight.normal),
               textAlign: TextAlign.center,
             ),
+            Text(
+              'Yellow Ball',
+              style: TextStyle(
+                  fontFamily: 'Helvetica Neue',
+                  fontSize: 12,
+                  fontWeight: (game.players[0].active)
+                      ? FontWeight.bold
+                      : FontWeight.normal),
+              textAlign: TextAlign.center,
+            ),
           ]),
         ),
         Expanded(
@@ -438,6 +456,16 @@ class _GameView extends State<GameView> {
             ),
             Text(
               'Score Multiplier: ${game.players[1].multiplier}',
+              style: TextStyle(
+                  fontFamily: 'Helvetica Neue',
+                  fontSize: 12,
+                  fontWeight: (game.players[0].active)
+                      ? FontWeight.bold
+                      : FontWeight.normal),
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              'White Ball',
               style: TextStyle(
                   fontFamily: 'Helvetica Neue',
                   fontSize: 12,

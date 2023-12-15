@@ -340,7 +340,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   SizedBox(height: 15.00),
                   Row(children: [
                     bigButton(
-                        Text('Start Game',
+                        Text('Start Match',
                             textAlign: TextAlign.left,
                             style: TextStyle(
                               fontFamily: 'Helvetica Neue',

@@ -8,6 +8,7 @@ class Game {
   bool timed = false;
   num minutes = 0;
   num targetScore = 0;
+  bool handicappedByTiers = false;
 
   String winCondition = 'score';
 
@@ -45,6 +46,61 @@ class Game {
     List pl = players.where((p) => !p.active).toList();
     Player p = pl[0];
     return p;
+  }
+
+  void stroke(lh2, wh2, c, lh3, wh3) {
+    List<String> stroke = [];
+    Player p = this.getActivePlayer();
+
+    if (c && (!lh2 && !wh2 && !lh3 && !wh3)) {
+      p.connsecutiveCannons++;
+    } else {
+      p.connsecutiveCannons = 0;
+    }
+
+    if (!c && (lh2 || wh2 || lh3 || wh3)) {
+      p.connsecutiveHazards++;
+    }
+
+    if (c) {
+      p.connsecutiveHazards = 0;
+    }
+
+    if (lh2) {
+      p.rawScore += 2;
+      p.currBreak += 2;
+      stroke.add("LH2");
+    }
+    if (wh2) {
+      p.rawScore += 2;
+      p.currBreak += 2;
+      stroke.add("LH2");
+    }
+    if (c) {
+      p.rawScore += 2;
+      p.currBreak += 2;
+      stroke.add("C");
+    }
+    if (lh3) {
+      p.rawScore += 3;
+      p.currBreak += 3;
+      stroke.add("LH3");
+    }
+    if (wh3) {
+      p.rawScore += 3;
+      p.currBreak += 3;
+      stroke.add("WH3");
+    }
+
+    if (p.currBreak > p.highestBreak) {
+      p.highestBreak = p.currBreak;
+    }
+    if (this.handicappedByTiers) {
+      p.score = p.multiplier * p.rawScore;
+    } else {
+      p.score = p.rawScore + p.handicap;
+    }
+    currGame.add(stroke);
   }
 
   void passTurn() {
@@ -114,8 +170,21 @@ class Game {
 
   Game(playerNames, handicaps, tiers, handicappedByTiers, timed, minutes,
       targetScore) {
-    this.players.add(new Player(playerNames[0], handicaps[0], tiers[0]));
-    this.players.add(new Player(playerNames[1], handicaps[1], tiers[1]));
+    this.handicappedByTiers = handicappedByTiers;
+    num multiplier = 1.0;
+    bool mpForP1 = false;
+    if (tiers[0] != 0 && tiers[1] != 0 && handicappedByTiers) {
+      if (tiers[0] < tiers[1]) {
+        multiplier = ((tiers[1] - tiers[0]) * 0.5) + 1.0;
+      } else {
+        mpForP1 = true;
+        multiplier = ((tiers[0] - tiers[1]) * 0.5) + 1.0;
+      }
+    }
+    this.players.add(new Player(
+        playerNames[0], handicaps[0], tiers[0], (mpForP1) ? multiplier : 1.0));
+    this.players.add(new Player(
+        playerNames[1], handicaps[1], tiers[1], (!mpForP1) ? multiplier : 1.0));
     this.timed = timed;
     this.targetScore = targetScore;
     this.minutes = minutes;
