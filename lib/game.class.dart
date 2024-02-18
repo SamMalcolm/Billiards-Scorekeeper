@@ -1,4 +1,9 @@
 import 'player.class.dart';
+// TO DO
+
+// - undo needs to not allow for - counters in hazards and canons
+// - undo needs to fix a big causing a score issue
+// - baulk line warning rule only written for 80, not 180, 280,380 etc.
 
 class Game {
   List players = [];
