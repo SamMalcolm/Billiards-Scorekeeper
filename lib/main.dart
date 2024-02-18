@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'English Billiards',
       theme:
-          ThemeData(primarySwatch: Colors.green, brightness: Brightness.light),
+          ThemeData(primarySwatch: Colors.green, brightness: Brightness.dark),
       home: MyHomePage(title: 'Billiards Scoreboard'),
     );
   }

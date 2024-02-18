@@ -48,252 +48,309 @@ class _GameView extends State<GameView> {
   bool lh3 = false;
 
   List scoringInput(context) {
-    return [
-      Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(children: [
-            Divider(),
-            Text("Two Point Scores"),
-            SizedBox(height: 10.00),
-            Row(children: [
-              bigButton(
-                  Text('Winning Hazard (Potting Opponent)',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontFamily: 'Helvetica Neue',
-                        fontSize: 22,
-                        color: ((game.players[1].active))
-                            ? Colors.white
-                            : const Color(0xff9D2C2C),
-                      )),
-                  (game.players[1].active)
-                      ? [
-                          Color.fromARGB(255, 225, 183, 14),
-                          Color.fromARGB(255, 197, 156, 11),
-                        ]
-                      : [
-                          Color.fromARGB(255, 250, 247, 222),
-                          Color.fromARGB(255, 216, 214, 192),
-                        ], () {
-                setState(() => wh2 = !wh2);
-              }, border: wh2),
-            ]),
-            SizedBox(height: 10.00),
-            Row(children: [
-              bigButton(
-                  Text('Losing Hazard (In-Off Opponent)',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontFamily: 'Helvetica Neue',
-                        fontSize: 22,
-                        color: ((game.players[1].active))
-                            ? Colors.white
-                            : const Color(0xff9D2C2C),
-                      )),
-                  (game.players[1].active)
-                      ? [
-                          Color.fromARGB(255, 225, 183, 14),
-                          Color.fromARGB(255, 197, 156, 11),
-                        ]
-                      : [
-                          Color.fromARGB(255, 250, 247, 222),
-                          Color.fromARGB(255, 216, 214, 192),
-                        ], () {
-                setState(() => lh2 = !lh2);
-              }, border: lh2),
-            ]),
-            SizedBox(height: 10.00),
-            Row(children: [
-              bigButton(
-                  Text('Cannon',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontFamily: 'Helvetica Neue',
-                        fontSize: 22,
-                        color: Colors.white,
-                      )),
-                  [
-                    (game.players[0].active)
-                        ? Color.fromARGB(255, 216, 214, 192)
-                        : Color.fromARGB(255, 225, 183, 14),
-                    const Color(0xff9D2C2C),
-                  ], () {
-                setState(() => c = !c);
-              }, border: c),
-            ]),
-            Divider(),
-            Text("Three Point Scores"),
-            SizedBox(height: 10.00),
-            Row(children: [
-              bigButton(
-                  Text('Winning Hazard (Potting Red)',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontFamily: 'Helvetica Neue',
-                        fontSize: 22,
-                        color: Colors.white,
-                      )),
-                  [
-                    const Color(0xffC72D2D),
-                    const Color(0xff9D2C2C),
-                  ], () {
-                setState(() => wh3 = !wh3);
-              }, border: wh3),
-            ]),
-            SizedBox(height: 10.00),
-            Row(
-              children: [
-                bigButton(
-                    Text('Losing Hazard (In-Off Red)',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontFamily: 'Helvetica Neue',
-                          fontSize: 22,
-                          color: Colors.white,
-                        )),
-                    [
-                      const Color(0xffC72D2D),
-                      const Color(0xff9D2C2C),
+    List<Widget> colChildren = [];
+    if (!game.opponentPotted)
+      colChildren.addAll([
+        Text("Two Point Scores"),
+        SizedBox(height: 10.00),
+        Row(children: [
+          bigButton(
+              Text('Winning Hazard (Potting Opponent)',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontFamily: 'Helvetica Neue',
+                    fontSize: 22,
+                    color: ((game.players[1].active))
+                        ? Colors.white
+                        : const Color(0xff9D2C2C),
+                  )),
+              (game.players[1].active)
+                  ? [
+                      Color.fromARGB(255, 225, 183, 14),
+                      Color.fromARGB(255, 197, 156, 11),
+                    ]
+                  : [
+                      Color.fromARGB(255, 250, 247, 222),
+                      Color.fromARGB(255, 216, 214, 192),
                     ], () {
-                  setState(() => lh3 = !lh3);
-                }, border: lh3),
-              ],
-            ),
-            Divider(),
-            Row(children: [
-              bigButton(
-                  Text('Submit Stroke',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontFamily: 'Helvetica Neue',
-                        fontSize: 22,
-                        color: Colors.white,
-                      )),
-                  [
-                    const Color(0xff4CA256),
-                    const Color(0xff397140),
-                  ], () {
-                setState(() {
-                  game.stroke(lh2, wh2, c, lh3, wh3);
-                  lh2 = false;
-                  wh2 = false;
-                  c = false;
-                  lh3 = false;
-                  wh3 = false;
-                });
-              }),
-            ]),
-            Divider(),
-            SizedBox(height: 10.00),
-            Row(
-              children: [
-                bigButton(
-                    Text('Foul',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontFamily: 'Helvetica Neue',
-                          fontSize: 18,
-                          color: Colors.white,
-                        )),
-                    [
-                      const Color(0xffCCCACA),
-                      const Color(0xffA2A0A0),
+            setState(() => wh2 = !wh2);
+          }, border: wh2, borderColour: Color.fromARGB(255, 152, 80, 80)),
+        ]),
+        SizedBox(height: 10.00),
+        Row(children: [
+          bigButton(
+              Text('Losing Hazard (In-Off Opponent)',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontFamily: 'Helvetica Neue',
+                    fontSize: 22,
+                    color: ((game.players[1].active))
+                        ? Colors.white
+                        : const Color(0xff9D2C2C),
+                  )),
+              (game.players[1].active)
+                  ? [
+                      Color.fromARGB(255, 225, 183, 14),
+                      Color.fromARGB(255, 197, 156, 11),
+                    ]
+                  : [
+                      Color.fromARGB(255, 250, 247, 222),
+                      Color.fromARGB(255, 216, 214, 192),
                     ], () {
-                  setState(() {});
-                })
-              ],
-            ),
-            SizedBox(height: 10.00),
-            Row(
-              children: [
-                bigButton(
-                    Text('Undo',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontFamily: 'Helvetica Neue',
-                          fontSize: 18,
-                          color: Colors.white,
-                        )),
-                    [
-                      const Color(0xffCCCACA),
-                      const Color(0xffA2A0A0),
-                    ], () {
-                  setState(() {
-                    game.undo();
-                  });
-                }),
-                SizedBox(width: 10.00),
-                bigButton(
-                    Text('Concede',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontFamily: 'Helvetica Neue',
-                          fontSize: 18,
-                          color: Colors.white,
-                        )),
-                    [
-                      const Color(0xffCCCACA),
-                      const Color(0xffA2A0A0),
-                    ], () {
-                  _showDialog(context, () {
-                    setState(() {
-                      game.endGame();
-                    });
-                  }, "Concede Game?", "Are you sure you to end this game?");
-                }),
-              ],
-            ),
-            SizedBox(height: 10.00),
-            Row(
-              children: [
-                bigButton(
-                    Text('Pass Turn',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontFamily: 'Helvetica Neue',
-                          fontSize: 18,
-                          color: Colors.white,
-                        )),
-                    [
-                      const Color(0xffCCCACA),
-                      const Color(0xffA2A0A0),
-                    ], () {
-                  setState(() {
-                    game.passTurn();
-                  });
-                }),
-              ],
-            ),
-            SizedBox(height: 10.00),
-            Row(children: [
-              bigButton(
-                  Text('End Match',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontFamily: 'Helvetica Neue',
-                        fontSize: 18,
-                        color: Colors.white,
-                      )),
-                  [
-                    const Color(0xffCCCACA),
-                    const Color(0xffA2A0A0),
-                  ], () {
-                _showDialog(context, () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            MyHomePage(title: "Billiards Scorekeeper"),
-                      ));
-                }, "End the Match?",
-                    "Are you sure you want to exit to the home screen?");
-              }),
-            ]),
-          ]))
-    ];
+            setState(() => lh2 = !lh2);
+          }, border: lh2, borderColour: Color.fromARGB(255, 152, 80, 80)),
+        ]),
+        SizedBox(height: 10.00),
+        Row(children: [
+          bigButton(
+              Text('Cannon',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontFamily: 'Helvetica Neue',
+                    fontSize: 22,
+                    color: Colors.white,
+                  )),
+              [
+                (game.players[0].active)
+                    ? Color.fromARGB(255, 216, 214, 192)
+                    : Color.fromARGB(255, 225, 183, 14),
+                const Color(0xff9D2C2C),
+              ], () {
+            setState(() => c = !c);
+          }, border: c),
+        ]),
+      ]);
+    List output = [];
+    colChildren.addAll([
+      Divider(),
+      Text("Three Point Scores"),
+      SizedBox(height: 10.00),
+      Row(children: [
+        bigButton(
+            Text('Winning Hazard (Potting Red)',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontFamily: 'Helvetica Neue',
+                  fontSize: 22,
+                  color: Colors.white,
+                )),
+            [
+              const Color(0xffC72D2D),
+              const Color(0xff9D2C2C),
+            ], () {
+          setState(() => wh3 = !wh3);
+        }, border: wh3),
+      ]),
+      SizedBox(height: 10.00),
+      Row(
+        children: [
+          bigButton(
+              Text('Losing Hazard (In-Off Red)',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontFamily: 'Helvetica Neue',
+                    fontSize: 22,
+                    color: Colors.white,
+                  )),
+              [
+                const Color(0xffC72D2D),
+                const Color(0xff9D2C2C),
+              ], () {
+            setState(() => lh3 = !lh3);
+          }, border: lh3),
+        ],
+      ),
+      Divider(),
+      Row(children: [
+        bigButton(
+            Text('Submit Stroke',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontFamily: 'Helvetica Neue',
+                  fontSize: 22,
+                  color: Colors.white,
+                )),
+            [
+              const Color(0xff4CA256),
+              const Color(0xff397140),
+            ], () {
+          setState(() {
+            game.stroke(lh2, wh2, c, lh3, wh3);
+            lh2 = false;
+            wh2 = false;
+            c = false;
+            lh3 = false;
+            wh3 = false;
+          });
+        }),
+      ]),
+      Divider(),
+      SizedBox(height: 10.00),
+      Row(
+        children: [
+          bigButton(
+              Text('Foul',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontFamily: 'Helvetica Neue',
+                    fontSize: 18,
+                    color: Colors.white,
+                  )),
+              [
+                const Color(0xffCCCACA),
+                const Color(0xffA2A0A0),
+              ], () {
+            setState(() {
+              game.foul();
+            });
+          }),
+          SizedBox(width: 10.00),
+          bigButton(
+              Text('Miss',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontFamily: 'Helvetica Neue',
+                    fontSize: 18,
+                    color: Colors.white,
+                  )),
+              [
+                const Color(0xffCCCACA),
+                const Color(0xffA2A0A0),
+              ], () {
+            setState(() {
+              game.miss();
+            });
+          }),
+        ],
+      ),
+      SizedBox(height: 10.00),
+      Row(
+        children: [
+          bigButton(
+              Text('Undo',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontFamily: 'Helvetica Neue',
+                    fontSize: 18,
+                    color: Colors.white,
+                  )),
+              [
+                const Color(0xffCCCACA),
+                const Color(0xffA2A0A0),
+              ], () {
+            setState(() {
+              game.undo();
+            });
+          }),
+          SizedBox(width: 10.00),
+          bigButton(
+              Text('End Game',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontFamily: 'Helvetica Neue',
+                    fontSize: 18,
+                    color: Colors.white,
+                  )),
+              [
+                const Color(0xffCCCACA),
+                const Color(0xffA2A0A0),
+              ], () {
+            _showDialog(context, () {
+              setState(() {
+                game.endGame();
+              });
+            }, "End Game?",
+                "Are you sure you to end this game? The winner will be the player with the higher score.");
+          }),
+        ],
+      ),
+      SizedBox(height: 10.00),
+      Row(
+        children: [
+          bigButton(
+              Text('Pass Turn',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontFamily: 'Helvetica Neue',
+                    fontSize: 18,
+                    color: Colors.white,
+                  )),
+              [
+                const Color(0xffCCCACA),
+                const Color(0xffA2A0A0),
+              ], () {
+            setState(() {
+              game.passTurn();
+            });
+          }),
+        ],
+      ),
+      SizedBox(height: 10.00),
+      Row(children: [
+        bigButton(
+            Text('End Match',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontFamily: 'Helvetica Neue',
+                  fontSize: 18,
+                  color: Colors.white,
+                )),
+            [
+              const Color(0xffCCCACA),
+              const Color(0xffA2A0A0),
+            ], () {
+          _showDialog(context, () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      MyHomePage(title: "Billiards Scorekeeper"),
+                ));
+          }, "End the Match?",
+              "Are you sure you want to exit to the home screen?");
+        }),
+      ]),
+    ]);
+    if (game.baulkLineWarningDue)
+      output.addAll([
+        BlurryDialog("Player is due for warning",
+            "Please advise the player of the Baulk line limit by announcing 'BAULK LINE WARNING AT 80'",
+            () {
+          setState(() {
+            print("RUNNING");
+            game.baulkLineWarningGiven();
+          });
+        })
+      ]);
+    if (game.cannonWarningDue)
+      output.addAll([
+        BlurryDialog("Player is due for warning",
+            "Please warn the player they are approaching the limit of 75 consecutive cannons by announcing 'SEVENTY CANONS'",
+            () {
+          setState(() {
+            print("RUNNING");
+            game.cannonWarningDue = false;
+          });
+        })
+      ]);
+    if (game.hazardWarningDue)
+      output.addAll([
+        BlurryDialog("Player is due for warning",
+            "Please warn the player they are approaching the limit of 15 consecutive hazards by announcing 'TEN HAZARDS'",
+            () {
+          setState(() {
+            print("RUNNING");
+            game.hazardWarningDue = false;
+          });
+        })
+      ]);
+    output.add(Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(children: colChildren)));
+    return output;
   }
 
-  List scoreBoard() {
+  List scoreBoard({middleComponent}) {
     return [
       Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Expanded(
@@ -339,6 +396,26 @@ class _GameView extends State<GameView> {
               textAlign: TextAlign.center,
             ),
             Text(
+              '# Hazards: ${game.players[0].consecutiveHazards}',
+              style: TextStyle(
+                  fontFamily: 'Helvetica Neue',
+                  fontSize: 12,
+                  fontWeight: (game.players[0].active)
+                      ? FontWeight.bold
+                      : FontWeight.normal),
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              '# Cannons: ${game.players[0].consecutiveCannons}',
+              style: TextStyle(
+                  fontFamily: 'Helvetica Neue',
+                  fontSize: 12,
+                  fontWeight: (game.players[0].active)
+                      ? FontWeight.bold
+                      : FontWeight.normal),
+              textAlign: TextAlign.center,
+            ),
+            Text(
               'HB: ${game.players[0].highestBreak}',
               style: TextStyle(
                   fontFamily: 'Helvetica Neue',
@@ -348,26 +425,28 @@ class _GameView extends State<GameView> {
                       : FontWeight.normal),
               textAlign: TextAlign.center,
             ),
-            Text(
-              'Raw Score: ${game.players[0].rawScore}',
-              style: TextStyle(
-                  fontFamily: 'Helvetica Neue',
-                  fontSize: 12,
-                  fontWeight: (game.players[0].active)
-                      ? FontWeight.bold
-                      : FontWeight.normal),
-              textAlign: TextAlign.center,
-            ),
-            Text(
-              'Score Multiplier: ${game.players[0].multiplier}',
-              style: TextStyle(
-                  fontFamily: 'Helvetica Neue',
-                  fontSize: 12,
-                  fontWeight: (game.players[0].active)
-                      ? FontWeight.bold
-                      : FontWeight.normal),
-              textAlign: TextAlign.center,
-            ),
+            if (game.handicapped)
+              Text(
+                'Raw Score: ${game.players[0].rawScore}',
+                style: TextStyle(
+                    fontFamily: 'Helvetica Neue',
+                    fontSize: 12,
+                    fontWeight: (game.players[0].active)
+                        ? FontWeight.bold
+                        : FontWeight.normal),
+                textAlign: TextAlign.center,
+              ),
+            if (game.handicappedByTiers)
+              Text(
+                'Score Multiplier: ${game.players[0].multiplier}',
+                style: TextStyle(
+                    fontFamily: 'Helvetica Neue',
+                    fontSize: 12,
+                    fontWeight: (game.players[0].active)
+                        ? FontWeight.bold
+                        : FontWeight.normal),
+                textAlign: TextAlign.center,
+              ),
             Text(
               'Yellow Ball',
               style: TextStyle(
@@ -390,6 +469,7 @@ class _GameView extends State<GameView> {
               ),
               textAlign: TextAlign.center,
             ),
+            middleComponent
           ]),
         ),
         Expanded(
@@ -435,7 +515,7 @@ class _GameView extends State<GameView> {
               textAlign: TextAlign.center,
             ),
             Text(
-              'HB: ${game.players[1].highestBreak}',
+              '# Hazards: ${game.players[1].consecutiveHazards}',
               style: TextStyle(
                   fontFamily: 'Helvetica Neue',
                   fontSize: 12,
@@ -445,31 +525,53 @@ class _GameView extends State<GameView> {
               textAlign: TextAlign.center,
             ),
             Text(
-              'Raw Score: ${game.players[1].rawScore}',
+              '# Cannons: ${game.players[1].consecutiveCannons}',
               style: TextStyle(
                   fontFamily: 'Helvetica Neue',
                   fontSize: 12,
-                  fontWeight: (game.players[0].active)
+                  fontWeight: (game.players[1].active)
                       ? FontWeight.bold
                       : FontWeight.normal),
               textAlign: TextAlign.center,
             ),
             Text(
-              'Score Multiplier: ${game.players[1].multiplier}',
+              'HB: ${game.players[1].highestBreak}',
               style: TextStyle(
                   fontFamily: 'Helvetica Neue',
                   fontSize: 12,
-                  fontWeight: (game.players[0].active)
+                  fontWeight: (game.players[1].active)
                       ? FontWeight.bold
                       : FontWeight.normal),
               textAlign: TextAlign.center,
             ),
+            if (game.handicapped)
+              Text(
+                'Raw Score: ${game.players[1].rawScore}',
+                style: TextStyle(
+                    fontFamily: 'Helvetica Neue',
+                    fontSize: 12,
+                    fontWeight: (game.players[1].active)
+                        ? FontWeight.bold
+                        : FontWeight.normal),
+                textAlign: TextAlign.center,
+              ),
+            if (game.handicappedByTiers)
+              Text(
+                'Score Multiplier: ${game.players[1].multiplier}',
+                style: TextStyle(
+                    fontFamily: 'Helvetica Neue',
+                    fontSize: 12,
+                    fontWeight: (game.players[0].active)
+                        ? FontWeight.bold
+                        : FontWeight.normal),
+                textAlign: TextAlign.center,
+              ),
             Text(
               'White Ball',
               style: TextStyle(
                   fontFamily: 'Helvetica Neue',
                   fontSize: 12,
-                  fontWeight: (game.players[0].active)
+                  fontWeight: (game.players[1].active)
                       ? FontWeight.bold
                       : FontWeight.normal),
               textAlign: TextAlign.center,
@@ -511,9 +613,45 @@ class _GameView extends State<GameView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Container(
+                              height: 10.0,
+                              foregroundDecoration:
+                                  BoxDecoration(color: Colors.yellow),
+                            )),
+                            Expanded(
+                                child: Container(
+                              height: 10.0,
+                              foregroundDecoration:
+                                  BoxDecoration(color: Colors.white),
+                            ))
+                          ],
+                        ),
                         SizedBox(height: 15.00),
-                        if (widget.timed) new TimerC(widget.minutes).component,
-                        ...scoreBoard(),
+                        ...scoreBoard(
+                            middleComponent: (widget.timed)
+                                ? new TimerC(widget.minutes).component
+                                : Text("Target Score: " +
+                                    widget.targetScore.toString())),
+                        SizedBox(height: 15.00),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: Container(
+                              height: 10.0,
+                              foregroundDecoration:
+                                  BoxDecoration(color: Colors.yellow),
+                            )),
+                            Expanded(
+                                child: Container(
+                              height: 10.0,
+                              foregroundDecoration:
+                                  BoxDecoration(color: Colors.white),
+                            ))
+                          ],
+                        ),
                         ...scoringInput(context),
                       ],
                     ),
