@@ -311,39 +311,6 @@ class _GameView extends State<GameView> {
         }),
       ]),
     ]);
-    if (game.baulkLineWarningDue)
-      output.addAll([
-        BlurryDialog("Player is due for warning",
-            "Please advise the player of the Baulk line limit by announcing 'BAULK LINE WARNING AT 80'",
-            () {
-          setState(() {
-            print("RUNNING");
-            game.baulkLineWarningGiven();
-          });
-        })
-      ]);
-    if (game.cannonWarningDue)
-      output.addAll([
-        BlurryDialog("Player is due for warning",
-            "Please warn the player they are approaching the limit of 75 consecutive cannons by announcing 'SEVENTY CANONS'",
-            () {
-          setState(() {
-            print("RUNNING");
-            game.cannonWarningDue = false;
-          });
-        })
-      ]);
-    if (game.hazardWarningDue)
-      output.addAll([
-        BlurryDialog("Player is due for warning",
-            "Please warn the player they are approaching the limit of 15 consecutive hazards by announcing 'TEN HAZARDS'",
-            () {
-          setState(() {
-            print("RUNNING");
-            game.hazardWarningDue = false;
-          });
-        })
-      ]);
     output.add(Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(children: colChildren)));
@@ -600,11 +567,38 @@ class _GameView extends State<GameView> {
 
     return Scaffold(
         body: AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.dark,
+      value: SystemUiOverlayStyle.light,
       child: OrientationBuilder(builder: (context, orientation) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
+            if (game.baulkLineWarningDue)
+              BlurryDialog("Player is due for warning",
+                  "Please advise the player of the Baulk line limit by announcing 'BAULK LINE WARNING AT 80'",
+                  () {
+                setState(() {
+                  print("RUNNING");
+                  game.baulkLineWarningGiven();
+                });
+              }),
+            if (game.cannonWarningDue)
+              BlurryDialog("Player is due for warning",
+                  "Please warn the player they are approaching the limit of 75 consecutive cannons by announcing 'SEVENTY CANONS'",
+                  () {
+                setState(() {
+                  print("RUNNING");
+                  game.cannonWarningDue = false;
+                });
+              }),
+            if (game.hazardWarningDue)
+              BlurryDialog("Player is due for warning",
+                  "Please warn the player they are approaching the limit of 15 consecutive hazards by announcing 'TEN HAZARDS'",
+                  () {
+                setState(() {
+                  print("RUNNING");
+                  game.hazardWarningDue = false;
+                });
+              }),
             Expanded(
               child: SafeArea(
                 child: Container(

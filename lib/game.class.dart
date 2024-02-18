@@ -115,11 +115,10 @@ class Game {
       this.locked = true;
     }
 
-    if (p.currBreak >= 80 && this.baulkLineCrossingRuleApplies) {
+    if (isBetween80And100ForEvery100(p.currBreak) &&
+        this.baulkLineCrossingRuleApplies) {
       if (baulkLineWarningsIssued.length > 0) {
         num lastWarningGiven = baulkLineWarningsIssued.removeLast();
-        print("LAST WARNING");
-        print(lastWarningGiven);
         if ((p.currBreak - lastWarningGiven) >= 50) {
           this.baulkLineWarningDue = true;
         }
@@ -145,6 +144,12 @@ class Game {
 
     this.baulkLineWarningsIssued.add(ap.currBreak);
     this.baulkLineWarningDue = false;
+  }
+
+  bool isBetween80And100ForEvery100(num currBreak) {
+    int lowerBound = (currBreak ~/ 100) * 100 + 80;
+    int upperBound = (currBreak ~/ 100) * 100 + 100;
+    return currBreak >= lowerBound && currBreak <= upperBound;
   }
 
   void passTurn() {
