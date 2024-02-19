@@ -55,31 +55,7 @@ class _GameView extends State<GameView> {
         SizedBox(height: 10.00),
         Row(children: [
           bigButton(
-              Text('Winning Hazard (Potting Opponent)',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontFamily: 'Helvetica Neue',
-                    fontSize: 22,
-                    color: ((game.players[1].active))
-                        ? Colors.white
-                        : const Color(0xff9D2C2C),
-                  )),
-              (game.players[1].active)
-                  ? [
-                      Color.fromARGB(255, 225, 183, 14),
-                      Color.fromARGB(255, 197, 156, 11),
-                    ]
-                  : [
-                      Color.fromARGB(255, 250, 247, 222),
-                      Color.fromARGB(255, 216, 214, 192),
-                    ], () {
-            setState(() => wh2 = !wh2);
-          }, border: wh2, borderColour: Color.fromARGB(255, 152, 80, 80)),
-        ]),
-        SizedBox(height: 10.00),
-        Row(children: [
-          bigButton(
-              Text('Losing Hazard (In-Off Opponent)',
+              Text('Losing Hazard',
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontFamily: 'Helvetica Neue',
@@ -99,6 +75,28 @@ class _GameView extends State<GameView> {
                     ], () {
             setState(() => lh2 = !lh2);
           }, border: lh2, borderColour: Color.fromARGB(255, 152, 80, 80)),
+          SizedBox(width: 10),
+          bigButton(
+              Text('Winning Hazard',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontFamily: 'Helvetica Neue',
+                    fontSize: 22,
+                    color: ((game.players[1].active))
+                        ? Colors.white
+                        : const Color(0xff9D2C2C),
+                  )),
+              (game.players[1].active)
+                  ? [
+                      Color.fromARGB(255, 225, 183, 14),
+                      Color.fromARGB(255, 197, 156, 11),
+                    ]
+                  : [
+                      Color.fromARGB(255, 250, 247, 222),
+                      Color.fromARGB(255, 216, 214, 192),
+                    ], () {
+            setState(() => wh2 = !wh2);
+          }, border: wh2, borderColour: Color.fromARGB(255, 152, 80, 80)),
         ]),
         SizedBox(height: 10.00),
         Row(children: [
@@ -127,7 +125,22 @@ class _GameView extends State<GameView> {
       SizedBox(height: 10.00),
       Row(children: [
         bigButton(
-            Text('Winning Hazard (Potting Red)',
+            Text('Losing Hazard',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontFamily: 'Helvetica Neue',
+                  fontSize: 22,
+                  color: Colors.white,
+                )),
+            [
+              const Color(0xffC72D2D),
+              const Color(0xff9D2C2C),
+            ], () {
+          setState(() => lh3 = !lh3);
+        }, border: lh3),
+        SizedBox(width: 10.00),
+        bigButton(
+            Text('Winning Hazard',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontFamily: 'Helvetica Neue',
@@ -142,24 +155,6 @@ class _GameView extends State<GameView> {
         }, border: wh3),
       ]),
       SizedBox(height: 10.00),
-      Row(
-        children: [
-          bigButton(
-              Text('Losing Hazard (In-Off Red)',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontFamily: 'Helvetica Neue',
-                    fontSize: 22,
-                    color: Colors.white,
-                  )),
-              [
-                const Color(0xffC72D2D),
-                const Color(0xff9D2C2C),
-              ], () {
-            setState(() => lh3 = !lh3);
-          }, border: lh3),
-        ],
-      ),
       Divider(),
       Row(children: [
         bigButton(
@@ -181,10 +176,67 @@ class _GameView extends State<GameView> {
             c = false;
             lh3 = false;
             wh3 = false;
+
+            if (game.hazardWarningDue)
+              _showDialog(
+                context,
+                () {
+                  setState(() {
+                    print("RUNNING");
+                    game.hazardWarningDue = false;
+                  });
+                },
+                "Player is due for warning",
+                "Please warn the player they are approaching the limit of 15 consecutive hazards by announcing 'TEN HAZARDS'",
+              );
+            if (game.cannonWarningDue)
+              _showDialog(
+                context,
+                () {
+                  setState(() {
+                    print("RUNNING");
+                    game.cannonWarningDue = false;
+                  });
+                },
+                "Player is due for warning",
+                "Please warn the player they are approaching the limit of 75 consecutive cannons by announcing 'SEVENTY CANONS'",
+              );
+            if (game.baulkLineWarningDue)
+              _showDialog(
+                context,
+                () {
+                  setState(() {
+                    print("RUNNING");
+                    game.baulkLineWarningGiven();
+                  });
+                },
+                "Player is due for warning",
+                "Please advise the player of the Baulk line limit by announcing 'BAULK LINE WARNING AT 80'",
+              );
           });
         }),
       ]),
       Divider(),
+      Row(
+        children: [
+          bigButton(
+              Text('Pass Turn',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontFamily: 'Helvetica Neue',
+                    fontSize: 18,
+                    color: Colors.black,
+                  )),
+              [
+                const Color(0xffCCCACA),
+                const Color(0xffA2A0A0),
+              ], () {
+            setState(() {
+              game.passTurn();
+            });
+          }),
+        ],
+      ),
       SizedBox(height: 10.00),
       Row(
         children: [
@@ -194,7 +246,7 @@ class _GameView extends State<GameView> {
                   style: TextStyle(
                     fontFamily: 'Helvetica Neue',
                     fontSize: 18,
-                    color: Colors.white,
+                    color: Colors.black,
                   )),
               [
                 const Color(0xffCCCACA),
@@ -211,7 +263,7 @@ class _GameView extends State<GameView> {
                   style: TextStyle(
                     fontFamily: 'Helvetica Neue',
                     fontSize: 18,
-                    color: Colors.white,
+                    color: Colors.black,
                   )),
               [
                 const Color(0xffCCCACA),
@@ -232,7 +284,7 @@ class _GameView extends State<GameView> {
                   style: TextStyle(
                     fontFamily: 'Helvetica Neue',
                     fontSize: 18,
-                    color: Colors.white,
+                    color: Colors.black,
                   )),
               [
                 const Color(0xffCCCACA),
@@ -249,7 +301,7 @@ class _GameView extends State<GameView> {
                   style: TextStyle(
                     fontFamily: 'Helvetica Neue',
                     fontSize: 18,
-                    color: Colors.white,
+                    color: Colors.black,
                   )),
               [
                 const Color(0xffCCCACA),
@@ -265,27 +317,6 @@ class _GameView extends State<GameView> {
         ],
       ),
       SizedBox(height: 10.00),
-      Row(
-        children: [
-          bigButton(
-              Text('Pass Turn',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontFamily: 'Helvetica Neue',
-                    fontSize: 18,
-                    color: Colors.white,
-                  )),
-              [
-                const Color(0xffCCCACA),
-                const Color(0xffA2A0A0),
-              ], () {
-            setState(() {
-              game.passTurn();
-            });
-          }),
-        ],
-      ),
-      SizedBox(height: 10.00),
       Row(children: [
         bigButton(
             Text('End Match',
@@ -293,7 +324,7 @@ class _GameView extends State<GameView> {
                 style: TextStyle(
                   fontFamily: 'Helvetica Neue',
                   fontSize: 18,
-                  color: Colors.white,
+                  color: Colors.black,
                 )),
             [
               const Color(0xffCCCACA),
@@ -546,6 +577,21 @@ class _GameView extends State<GameView> {
           ]),
         ),
       ]),
+      SizedBox(height: 10),
+      Row(
+        children: [
+          Expanded(
+              child: Container(
+            height: 10.0,
+            foregroundDecoration: BoxDecoration(color: Colors.yellow),
+          )),
+          Expanded(
+              child: Container(
+            height: 10.0,
+            foregroundDecoration: BoxDecoration(color: Colors.white),
+          ))
+        ],
+      ),
     ];
   }
 
@@ -565,98 +611,107 @@ class _GameView extends State<GameView> {
       }
     });
 
-    return Scaffold(
+    return new PopScope(
+      canPop: false,
+      child: Scaffold(
         body: AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light,
-      child: OrientationBuilder(builder: (context, orientation) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            if (game.baulkLineWarningDue)
-              BlurryDialog("Player is due for warning",
-                  "Please advise the player of the Baulk line limit by announcing 'BAULK LINE WARNING AT 80'",
-                  () {
-                setState(() {
-                  print("RUNNING");
-                  game.baulkLineWarningGiven();
-                });
-              }),
-            if (game.cannonWarningDue)
-              BlurryDialog("Player is due for warning",
-                  "Please warn the player they are approaching the limit of 75 consecutive cannons by announcing 'SEVENTY CANONS'",
-                  () {
-                setState(() {
-                  print("RUNNING");
-                  game.cannonWarningDue = false;
-                });
-              }),
-            if (game.hazardWarningDue)
-              BlurryDialog("Player is due for warning",
-                  "Please warn the player they are approaching the limit of 15 consecutive hazards by announcing 'TEN HAZARDS'",
-                  () {
-                setState(() {
-                  print("RUNNING");
-                  game.hazardWarningDue = false;
-                });
-              }),
-            Expanded(
-              child: SafeArea(
-                child: Container(
-                  height: MediaQuery.of(context).size.height,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                                child: Container(
-                              height: 10.0,
-                              foregroundDecoration:
-                                  BoxDecoration(color: Colors.yellow),
-                            )),
-                            Expanded(
-                                child: Container(
-                              height: 10.0,
-                              foregroundDecoration:
-                                  BoxDecoration(color: Colors.white),
-                            ))
-                          ],
-                        ),
-                        SizedBox(height: 15.00),
-                        ...scoreBoard(
-                            middleComponent: (widget.timed)
-                                ? new TimerC(widget.minutes).component
-                                : Text("Target Score: " +
-                                    widget.targetScore.toString())),
-                        SizedBox(height: 15.00),
-                        Row(
-                          children: [
-                            Expanded(
-                                child: Container(
-                              height: 10.0,
-                              foregroundDecoration:
-                                  BoxDecoration(color: Colors.yellow),
-                            )),
-                            Expanded(
-                                child: Container(
-                              height: 10.0,
-                              foregroundDecoration:
-                                  BoxDecoration(color: Colors.white),
-                            ))
-                          ],
-                        ),
-                        ...scoringInput(context),
-                      ],
+          value: SystemUiOverlayStyle.light,
+          child: OrientationBuilder(builder: (context, orientation) {
+            return SafeArea(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                // Fixed scoreboard UI section
+                ...scoreBoard(
+                  middleComponent: (widget.timed)
+                      ? new TimerC(widget.minutes).component
+                      : Text("Target Score: " + widget.targetScore.toString()),
+                ),
+                Expanded(
+                  child: SafeArea(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          ...scoringInput(context),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            )
-          ],
-        );
-      }),
-    ));
+              ],
+            ));
+          }),
+        ),
+      ),
+    );
+
+//     return new PopScope(
+//         canPop: false,
+//         child: Scaffold(
+//             body: AnnotatedRegion<SystemUiOverlayStyle>(
+//           value: SystemUiOverlayStyle.light,
+//           child: OrientationBuilder(builder: (context, orientation) {
+//             return Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: <Widget>[
+//                 Expanded(
+//                   child: SafeArea(
+//                     child: Container(
+//                       height: MediaQuery.of(context).size.height,
+//                       child: SingleChildScrollView(
+//                         child: Column(
+//                           mainAxisAlignment: MainAxisAlignment.start,
+//                           children: [
+//                             Row(
+//                               children: [
+//                                 Expanded(
+//                                     child: Container(
+//                                   height: 10.0,
+//                                   foregroundDecoration:
+//                                       BoxDecoration(color: Colors.yellow),
+//                                 )),
+//                                 Expanded(
+//                                     child: Container(
+//                                   height: 10.0,
+//                                   foregroundDecoration:
+//                                       BoxDecoration(color: Colors.white),
+//                                 ))
+//                               ],
+//                             ),
+//                             SizedBox(height: 15.00),
+//                             ...scoreBoard(
+//                                 middleComponent: (widget.timed)
+//                                     ? new TimerC(widget.minutes).component
+//                                     : Text("Target Score: " +
+//                                         widget.targetScore.toString())),
+//                             SizedBox(height: 15.00),
+//                             Row(
+//                               children: [
+//                                 Expanded(
+//                                     child: Container(
+//                                   height: 10.0,
+//                                   foregroundDecoration:
+//                                       BoxDecoration(color: Colors.yellow),
+//                                 )),
+//                                 Expanded(
+//                                     child: Container(
+//                                   height: 10.0,
+//                                   foregroundDecoration:
+//                                       BoxDecoration(color: Colors.white),
+//                                 ))
+//                               ],
+//                             ),
+//                             ...scoringInput(context),
+//                           ],
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+//                 )
+//               ],
+//             );
+//           }),
+//         )));
   }
 }
 

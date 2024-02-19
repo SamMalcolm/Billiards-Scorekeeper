@@ -213,14 +213,7 @@ class Game {
         }
       } else {
         if (lastStroke.contains("C") && lastStroke.length == 1) {
-          ap.consecutiveCannons--;
           ap.rawScore -= 2;
-        } else if ((lastStroke.contains("WH2") ||
-                lastStroke.contains("LH2") ||
-                lastStroke.contains("WH3") ||
-                lastStroke.contains("LH3")) &&
-            lastStroke.contains("C") == false) {
-          ap.consecutiveHazards--;
         }
         if (lastStroke.contains("LH2")) {
           ap.rawScore -= 2;
@@ -234,6 +227,57 @@ class Game {
         }
         if (lastStroke.contains("LH3")) {
           ap.rawScore -= 3;
+        }
+
+// Loop backward through remaining strokes
+        num consecutiveCannonCount = 0;
+        num consecutiveHazardCount = 0;
+
+        for (int i = currGame.length - 1; i >= 0; i--) {
+          print("LOOPING BACKWARDS FOR CANNONS");
+          var stroke = currGame[i];
+          print(stroke);
+          if (stroke is List<String>) {
+            // Count consecutive cannons
+            if (stroke.every((element) => element == "C")) {
+              if (i == currGame.length - 1) {
+                // Check if this is the last element
+                print("INCREMENTING CANNON COUNT");
+                consecutiveCannonCount++;
+              } else {
+                break; // Stop counting consecutive cannons if a non-'C' stroke is encountered
+              }
+            } else {
+              break; // Stop counting consecutive cannons if a non-'C' stroke is encountered
+            }
+          }
+        }
+        for (int i = currGame.length - 1; i >= 0; i--) {
+          var stroke = currGame[i];
+          if (stroke is List<String>) {
+            print("LOOPING BACKWARDS FOR HAZARDS");
+            print(stroke);
+            // Count consecutive hazards
+            if ((stroke.contains("WH2") ||
+                    stroke.contains("LH2") ||
+                    stroke.contains("WH3") ||
+                    stroke.contains("LH3")) &&
+                !stroke.contains("C")) {
+              print("INCREMENTING HAZARD COUNT");
+              consecutiveHazardCount++;
+            } else {
+              break; // Stop counting consecutive hazards if a stroke with 'C' or without hazards is encountered
+            }
+          } else {
+            break; // Stop counting consecutive cannons and hazards if a non-list stroke is encountered
+          }
+        }
+
+        if (consecutiveCannonCount > 0) {
+          ap.consecutiveCannons = consecutiveCannonCount;
+        }
+        if (consecutiveHazardCount > 0) {
+          ap.consecutiveHazards = consecutiveHazardCount;
         }
       }
     }
