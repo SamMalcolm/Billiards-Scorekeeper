@@ -176,6 +176,7 @@ class Game {
     cannonWarningDue = false;
     hazardWarningDue = false;
     opponentPotted = false;
+
     baulkLineWarningsIssued = [];
     gamesPlayed++;
     currGame.add("END");

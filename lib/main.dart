@@ -150,9 +150,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 alignment: Alignment.bottomLeft,
                 children: [
                   Positioned.fill(
-                    child: FittedBox(
-                      child: Image.asset('images/billiards.jpg'),
-                      fit: BoxFit.cover,
+                    child: ClipRect(
+                      child: FittedBox(
+                        child: Image.asset('images/billiards.jpg'),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   Positioned.fill(

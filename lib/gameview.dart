@@ -59,7 +59,7 @@ class _GameView extends State<GameView> {
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontFamily: 'Helvetica Neue',
-                    fontSize: 22,
+                    fontSize: 16,
                     color: ((game.players[1].active))
                         ? Colors.white
                         : const Color(0xff9D2C2C),
@@ -81,7 +81,7 @@ class _GameView extends State<GameView> {
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontFamily: 'Helvetica Neue',
-                    fontSize: 22,
+                    fontSize: 16,
                     color: ((game.players[1].active))
                         ? Colors.white
                         : const Color(0xff9D2C2C),
@@ -105,7 +105,7 @@ class _GameView extends State<GameView> {
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontFamily: 'Helvetica Neue',
-                    fontSize: 22,
+                    fontSize: 16,
                     color: Colors.white,
                   )),
               [
@@ -129,7 +129,7 @@ class _GameView extends State<GameView> {
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontFamily: 'Helvetica Neue',
-                  fontSize: 22,
+                  fontSize: 16,
                   color: Colors.white,
                 )),
             [
@@ -144,7 +144,7 @@ class _GameView extends State<GameView> {
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontFamily: 'Helvetica Neue',
-                  fontSize: 22,
+                  fontSize: 16,
                   color: Colors.white,
                 )),
             [
@@ -644,74 +644,6 @@ class _GameView extends State<GameView> {
         ),
       ),
     );
-
-//     return new PopScope(
-//         canPop: false,
-//         child: Scaffold(
-//             body: AnnotatedRegion<SystemUiOverlayStyle>(
-//           value: SystemUiOverlayStyle.light,
-//           child: OrientationBuilder(builder: (context, orientation) {
-//             return Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: <Widget>[
-//                 Expanded(
-//                   child: SafeArea(
-//                     child: Container(
-//                       height: MediaQuery.of(context).size.height,
-//                       child: SingleChildScrollView(
-//                         child: Column(
-//                           mainAxisAlignment: MainAxisAlignment.start,
-//                           children: [
-//                             Row(
-//                               children: [
-//                                 Expanded(
-//                                     child: Container(
-//                                   height: 10.0,
-//                                   foregroundDecoration:
-//                                       BoxDecoration(color: Colors.yellow),
-//                                 )),
-//                                 Expanded(
-//                                     child: Container(
-//                                   height: 10.0,
-//                                   foregroundDecoration:
-//                                       BoxDecoration(color: Colors.white),
-//                                 ))
-//                               ],
-//                             ),
-//                             SizedBox(height: 15.00),
-//                             ...scoreBoard(
-//                                 middleComponent: (widget.timed)
-//                                     ? new TimerC(widget.minutes).component
-//                                     : Text("Target Score: " +
-//                                         widget.targetScore.toString())),
-//                             SizedBox(height: 15.00),
-//                             Row(
-//                               children: [
-//                                 Expanded(
-//                                     child: Container(
-//                                   height: 10.0,
-//                                   foregroundDecoration:
-//                                       BoxDecoration(color: Colors.yellow),
-//                                 )),
-//                                 Expanded(
-//                                     child: Container(
-//                                   height: 10.0,
-//                                   foregroundDecoration:
-//                                       BoxDecoration(color: Colors.white),
-//                                 ))
-//                               ],
-//                             ),
-//                             ...scoringInput(context),
-//                           ],
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                 )
-//               ],
-//             );
-//           }),
-//         )));
   }
 }
 
